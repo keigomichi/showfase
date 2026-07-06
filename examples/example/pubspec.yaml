@@ -1,0 +1,27 @@
+name: showfase_example
+description: Example Flutter app demonstrating showfase — a UI catalog generated from @Preview annotations.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.38.0"
+
+resolution: workspace
+
+dependencies:
+  cupertino_icons: 1.0.9
+  flutter:
+    sdk: flutter
+  showfase: 0.1.0
+  showfase_annotation: 0.1.0
+
+dev_dependencies:
+  build_runner: 2.15.0
+  flutter_lints: 6.0.0
+  flutter_test:
+    sdk: flutter
+  showfase_generator: 0.1.0
+
+flutter:
+  uses-material-design: true
