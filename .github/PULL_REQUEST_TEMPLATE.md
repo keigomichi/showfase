@@ -28,11 +28,12 @@ section otherwise. Before → after, or a short screen recording. -->
 
 ## How was this tested?
 
-<!-- Required. Since there is no CI yet, describe what you actually
-ran locally so the reviewer can reproduce:
+<!-- Required. CI runs format/analyze/tests/codegen checks, but
+platform-specific behavior still needs local verification. Describe
+what you actually ran:
 
-- Commands executed (e.g. `melos run analyze`, `dart test`,
-  `flutter test`, `dart run build_runner build`).
+- Commands executed beyond CI (e.g. `flutter run` on a device,
+  `dart run build_runner build`).
 - Platforms tried for UI changes (Chrome, macOS, iOS Simulator, …).
 - Anything skipped and why.
 
