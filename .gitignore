@@ -25,8 +25,26 @@ packages/*/example/macos/Flutter/ephemeral/
 packages/*/example/linux/flutter/ephemeral/
 packages/*/example/windows/flutter/ephemeral/
 
-# macOS
-.DS_Store
+# Claude Code local state — belongs to individual contributors.
+.claude/.cc-writes/
+.claude/settings.local.json
+
+# Defense-in-depth: prevent accidental commits of keys, certs, env files.
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+.env
+.env.*
+.envrc
+
+# Windows OS metadata (macOS `.DS_Store` already covered above).
+Thumbs.db
+desktop.ini
 
 # Do NOT ignore pubspec.lock — it is used to pin exact dependency versions
 # per this project's supply-chain policy.
