@@ -1,0 +1,12 @@
+name: _showfase_workspace
+publish_to: none
+description: Internal root of the showfase pub workspace. Not published.
+
+environment:
+  sdk: ^3.11.0
+
+workspace:
+  - packages/showfase_annotation
+  - packages/showfase_generator
+  - packages/showfase
+  - examples/example

@@ -1,0 +1,20 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # Generated code is exempted per-file via `// ignore_for_file:` directives.
+    todo: ignore
+
+linter:
+  rules:
+    - avoid_relative_lib_imports
+    - directives_ordering
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_final_locals
+    - unnecessary_lambdas
+    - use_super_parameters

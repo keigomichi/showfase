@@ -1,0 +1,37 @@
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+ephemeral/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# macOS
+.DS_Store
+
+# Flutter platform-generated caches inside example/
+examples/*/ios/Pods/
+examples/*/ios/.symlinks/
+examples/*/android/.gradle/
+examples/*/macos/Pods/
+examples/*/macos/Flutter/ephemeral/
+examples/*/linux/flutter/ephemeral/
+examples/*/windows/flutter/ephemeral/
+
+# macOS
+.DS_Store
+
+# Do NOT ignore pubspec.lock — it is used to pin exact dependency versions
+# per this project's supply-chain policy.
+!pubspec.lock
+
+# Do NOT ignore generated .g.dart files — they are committed on purpose so
+# consumers of the example app can inspect them and CI can diff them.
+!*.g.dart

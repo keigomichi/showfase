@@ -1,0 +1,6 @@
+[tools]
+flutter = "3.41.6"
+
+[env]
+# Use the Dart SDK bundled with the pinned Flutter version.
+DART_SDK = "{{ env.HOME }}/.local/share/mise/installs/flutter/3.41.6/bin/cache/dart-sdk"
