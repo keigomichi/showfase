@@ -1,0 +1,54 @@
+name: Feature request
+description: Propose a new capability, API, or improvement.
+title: "feat: "
+labels: [enhancement, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Focused proposals with a
+        concrete use case are easier to evaluate than open-ended ideas.
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case / problem
+      description: What are you trying to accomplish? Is your request related to a specific problem or limitation you hit?
+      placeholder: I was building X and wanted showfase to Y so that Z.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: |
+        Describe the desired behavior. Where useful, sketch the target
+        annotation shape or generated output. Consider whether this could
+        live in a downstream package instead of showfase itself.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you try or think about, and why did they fall short?
+
+  - type: checkboxes
+    id: package
+    attributes:
+      label: Which package(s) would this affect?
+      description: If known.
+      options:
+        - label: "`showfase` (runtime)"
+        - label: "`showfase_generator` (build_runner)"
+        - label: "`showfase_annotation`"
+        - label: "example app"
+        - label: Cross-cutting / unsure
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, related packages, prior art, etc.
