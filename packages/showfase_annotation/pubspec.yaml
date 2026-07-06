@@ -1,0 +1,21 @@
+name: showfase_annotation
+description: Annotations for showfase — a Flutter UI catalog generator that consumes Flutter's @Preview widgets.
+version: 0.1.0
+repository: https://github.com/keigomichi/showfase
+issue_tracker: https://github.com/keigomichi/showfase/issues
+topics:
+  - preview
+  - ui-catalog
+  - showkase
+  - design-system
+
+environment:
+  sdk: ^3.11.0
+
+resolution: workspace
+
+dependencies:
+  meta: 1.17.0
+
+dev_dependencies:
+  lints: 6.1.0
