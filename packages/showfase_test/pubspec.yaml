@@ -1,0 +1,26 @@
+name: showfase_test
+description: Golden (snapshot) testing for showfase — renders every @Preview offscreen and compares it against committed golden images.
+version: 0.1.0
+repository: https://github.com/keigomichi/showfase
+issue_tracker: https://github.com/keigomichi/showfase/issues
+topics:
+  - preview
+  - ui-catalog
+  - golden-test
+  - visual-regression-testing
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.38.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  showfase: 0.1.0
+
+dev_dependencies:
+  flutter_lints: 6.0.0

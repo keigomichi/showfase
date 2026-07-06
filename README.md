@@ -18,7 +18,8 @@ This repository is a pub workspace + melos monorepo:
 | [`showfase_annotation`](packages/showfase_annotation) | Anchor annotation (`@ShowfaseRoot`). Pure Dart. |
 | [`showfase_generator`](packages/showfase_generator) | `build_runner` code generator that collects `@Preview` widgets. |
 | [`showfase`](packages/showfase) | Flutter runtime (`ShowfaseApp`, `ShowfaseBrowser`, preview detail screen). |
-| [`packages/showfase/example`](packages/showfase/example) | Demo app with committed generated file. |
+| [`showfase_test`](packages/showfase_test) | Golden (snapshot) testing — renders every preview offscreen for visual regression tests. |
+| [`packages/showfase/example`](packages/showfase/example) | Demo app with committed generated file and golden tests. |
 
 ## Architecture
 
@@ -131,6 +132,43 @@ The detail screen for each preview lets you toggle:
 * Right-to-left layout
 * Locale (when the preview supplies `localizations`)
 
+## Golden testing (Visual Regression Testing)
+
+`showfase_test` turns the generated catalog into golden tests: one test per
+preview × device, compared against committed PNG baselines with
+`matchesGoldenFile`.
+
+```yaml
+# pubspec.yaml
+dev_dependencies:
+  showfase_test: 0.1.0
+```
+
+```dart
+// test/showfase_test.dart
+import 'package:flutter/material.dart';
+import 'package:my_app/showfase.g.dart';
+import 'package:showfase_test/showfase_test.dart';
+
+Future<void> main() async {
+  await testShowfase(
+    showfasePreviews(),
+    devices: [SnapshotDevice.iPhone15],
+    builder: (preview, device) => MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(body: preview),
+    ),
+  );
+}
+```
+
+Record baselines with `flutter test --update-goldens`, then plain
+`flutter test` fails on any visual diff. Snapshots are written to
+`test/snapshots/<device>/<group>/<name>.png`. See
+[`packages/showfase_test`](packages/showfase_test) for devices, sizing rules,
+sharding, and using an external diff tool such as reg-suit instead of
+committed goldens.
+
 ## Multi-package projects
 
 v1 aggregates only inside the package that hosts `@ShowfaseRoot`. To include
@@ -164,10 +202,12 @@ and issues a matching release each Flutter stable.
 ```bash
 mise use               # activates pinned Flutter 3.41.6 + Dart 3.11.1
 dart pub get
-melos run analyze      # dart analyze everywhere
-melos run test         # dart test everywhere
-melos run test:flutter # flutter test for Flutter packages
-melos run build        # regenerate the example's showfase.g.dart
+melos run analyze             # dart analyze everywhere
+melos run test                # dart test everywhere
+melos run test:flutter        # flutter test for Flutter packages (excl. golden)
+melos run test:golden         # golden tests against committed baselines
+melos run test:golden:update  # re-record golden baselines
+melos run build               # regenerate the example's showfase.g.dart
 ```
 
 ## License

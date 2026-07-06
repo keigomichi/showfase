@@ -1,0 +1,4 @@
+tags:
+  # Golden (snapshot) tests. They load real fonts, so record baselines on the
+  # same OS that CI compares on: `melos run test:golden:update`.
+  golden: {}

@@ -43,5 +43,8 @@ jobs:
       - name: Test (Flutter)
         run: dart run melos run test:flutter --no-select
 
+      - name: Test (golden)
+        run: dart run melos run test:golden --no-select
+
       - name: Verify generated files are up to date
         run: dart run melos run build:verify --no-select

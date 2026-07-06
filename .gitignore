@@ -53,3 +53,6 @@ desktop.ini
 # Do NOT ignore generated .g.dart files — they are committed on purpose so
 # consumers of the example app can inspect them and CI can diff them.
 !*.g.dart
+
+# Golden-test failure artifacts (written by flutter_test on mismatch).
+**/test/failures/
