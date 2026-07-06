@@ -1,0 +1,23 @@
+builders:
+  preview_scanner:
+    import: "package:showfase_generator/builder.dart"
+    builder_factories:
+      - previewScannerBuilder
+    build_extensions:
+      ".dart":
+        - ".showfase.json"
+    auto_apply: dependents
+    build_to: cache
+    runs_before:
+      - "showfase_generator:showfase_builder"
+  showfase_builder:
+    import: "package:showfase_generator/builder.dart"
+    builder_factories:
+      - showfaseBuilder
+    build_extensions:
+      ".dart":
+        - ".g.dart"
+    auto_apply: dependents
+    build_to: source
+    required_inputs:
+      - ".showfase.json"
