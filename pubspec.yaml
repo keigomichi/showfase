@@ -9,4 +9,4 @@ workspace:
   - packages/showfase_annotation
   - packages/showfase_generator
   - packages/showfase
-  - examples/example
+  - packages/showfase/example

@@ -86,14 +86,13 @@ pub workspace(Dart 3.6+)+ melos によるモノレポ。
 
 ```
 showfase/                        # ルート: pub workspace + melos
-├── pubspec.yaml                 # workspace: [packages/*, examples/*]
+├── pubspec.yaml                 # workspace: [packages/*, packages/showfase/example]
 ├── DESIGN.md / README.md / LICENSE (Apache-2.0)
-├── packages/
-│   ├── showfase_annotation/     # pure Dart。@ShowfaseRoot のみ(最小)
-│   ├── showfase_generator/      # pure Dart。build_runner ビルダー(2フェーズ)
-│   └── showfase/                # Flutter ランタイム。モデル + ShowfaseBrowser UI
-└── examples/
-    └── example/                 # デモアプリ(生成ファイルコミット済み)
+└── packages/
+    ├── showfase_annotation/     # pure Dart。@ShowfaseRoot のみ(最小)
+    ├── showfase_generator/      # pure Dart。build_runner ビルダー(2フェーズ)
+    └── showfase/                # Flutter ランタイム。モデル + ShowfaseBrowser UI
+        └── example/             # デモアプリ(生成ファイルコミット済み、pub.dev 慣行位置)
 ```
 
 依存関係:
@@ -361,7 +360,7 @@ class ShowfaseBrowser extends StatefulWidget { ... }
 
 環境オーバーライドの合成順(内→外): widget → `wrapper` → `Theme`(theme/brightness)→ `Localizations` → `MediaQuery`(textScaler)→ `Directionality` → size 制約。これを 1 つの `ShowfasePreviewCanvas` Widget に切り出し、単体で widget テスト可能にする。
 
-## 6. `examples/example`
+## 6. `packages/showfase/example`
 
 - `@Preview` 各バリエーション(トップレベル / static / コンストラクタ / factory / `WidgetBuilder` 戻り / group / size / textScaleFactor / brightness / wrapper / theme / localizations)
 - カスタム `MultiPreview` 派生(`BrightnessPreview`)とスタック `@Preview` の両方

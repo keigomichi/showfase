@@ -16,14 +16,14 @@ ephemeral/
 # macOS
 .DS_Store
 
-# Flutter platform-generated caches inside example/
-examples/*/ios/Pods/
-examples/*/ios/.symlinks/
-examples/*/android/.gradle/
-examples/*/macos/Pods/
-examples/*/macos/Flutter/ephemeral/
-examples/*/linux/flutter/ephemeral/
-examples/*/windows/flutter/ephemeral/
+# Flutter platform-generated caches inside example apps.
+packages/*/example/ios/Pods/
+packages/*/example/ios/.symlinks/
+packages/*/example/android/.gradle/
+packages/*/example/macos/Pods/
+packages/*/example/macos/Flutter/ephemeral/
+packages/*/example/linux/flutter/ephemeral/
+packages/*/example/windows/flutter/ephemeral/
 
 # macOS
 .DS_Store

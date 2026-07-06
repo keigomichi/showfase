@@ -1,6 +1,6 @@
 # showfase_example
 
-Demo app for [showfase](../../README.md).
+Demo app for [showfase](../../../README.md).
 
 Its previews cover every supported shape:
 

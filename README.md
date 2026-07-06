@@ -18,7 +18,7 @@ This repository is a pub workspace + melos monorepo:
 | [`showfase_annotation`](packages/showfase_annotation) | Anchor annotation (`@ShowfaseRoot`). Pure Dart. |
 | [`showfase_generator`](packages/showfase_generator) | `build_runner` code generator that collects `@Preview` widgets. |
 | [`showfase`](packages/showfase) | Flutter runtime (`ShowfaseApp`, `ShowfaseBrowser`, preview detail screen). |
-| [`examples/example`](examples/example) | Demo app with committed generated file. |
+| [`packages/showfase/example`](packages/showfase/example) | Demo app with committed generated file. |
 
 ## Architecture
 
