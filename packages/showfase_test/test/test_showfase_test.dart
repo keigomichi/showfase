@@ -4,9 +4,11 @@ import 'package:showfase/showfase.dart';
 import 'package:showfase_test/showfase_test.dart';
 import 'package:showfase_test/src/snapshot_support.dart';
 
-// A small device keeps the committed golden PNGs tiny. Everything below
-// renders with the deterministic FlutterTest font, so these goldens are
-// stable across platforms and stay untagged.
+// A small device keeps the committed golden PNGs tiny. Everything below is
+// text-free geometry, which renders bit-identically across operating
+// systems, so these goldens are compared everywhere and stay untagged.
+// (Text is excluded on purpose: glyph anti-aliasing differs slightly
+// between macOS and Linux even with the FlutterTest font.)
 const _device = SnapshotDevice(
   name: 'testDevice',
   size: Size(200, 300),
@@ -14,11 +16,6 @@ const _device = SnapshotDevice(
 );
 
 Widget _redBox() => const ColoredBox(color: Color(0xFFCC3333));
-
-Widget _label() => const Text(
-  'Showfase',
-  style: TextStyle(fontSize: 20, color: Color(0xFF222222)),
-);
 
 Widget _list() => ListView(
   children: [
@@ -50,11 +47,6 @@ const _previews = <ShowfasePreview>[
     id: 't#fixedBox',
     previewData: Preview(name: 'Fixed', group: 'Boxes', size: Size(100, 50)),
     builder: _redBox,
-  ),
-  ShowfasePreview(
-    id: 't#label',
-    previewData: Preview(name: 'Label', group: 'Text'),
-    builder: _label,
   ),
   ShowfasePreview(
     id: 't#list',

@@ -56,3 +56,10 @@ desktop.ini
 
 # Golden-test failure artifacts (written by flutter_test on mismatch).
 **/test/failures/
+
+# Catalog snapshots are record-only (taken in CI and uploaded as artifacts,
+# compared by external tooling) — never committed: text anti-aliasing differs
+# slightly across operating systems, so committed baselines cannot be stable.
+# The showfase_test package's own test/goldens/ (text-free geometry, which IS
+# cross-OS stable) stays committed on purpose.
+**/test/snapshots/

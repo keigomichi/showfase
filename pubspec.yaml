@@ -36,15 +36,9 @@ melos:
       packageFilters:
         dependsOn: flutter
         dirExists: test
-    test:golden:
-      description: Run golden (snapshot) tests against committed baselines.
-      exec: flutter test --tags golden
-      packageFilters:
-        dependsOn: showfase_test
-        dirExists: test
-    test:golden:update:
-      description: Re-record golden (snapshot) baselines.
-      exec: flutter test --tags golden --update-goldens
+    snapshot:
+      description: Take catalog snapshots (record-only; PNGs land in test/snapshots).
+      exec: rm -rf test/snapshots && flutter test --tags golden --update-goldens
       packageFilters:
         dependsOn: showfase_test
         dirExists: test

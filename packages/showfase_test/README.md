@@ -31,9 +31,14 @@ Future<void> main() async {
 ```
 
 ```bash
-flutter test --update-goldens   # record baselines
-flutter test                    # fail on any visual diff
+flutter test --update-goldens   # record snapshots
+flutter test                    # compare against recorded PNGs
 ```
+
+> **Cross-OS caveat**: glyph anti-aliasing differs slightly between macOS,
+> Linux, and Windows, so snapshots containing text only compare cleanly on
+> the OS they were recorded on. Either commit goldens recorded on the same
+> OS your CI uses, or run record-only and diff externally (see below).
 
 `testShowfase` registers **one test per preview × device**, grouped as
 `<device> > <group> > <name>`, so failures are isolated and standard filtering
@@ -101,9 +106,9 @@ additionalFonts: {
 },
 ```
 
-Because real fonts can rasterize slightly differently across operating
-systems, record baselines on the same OS your CI compares on (this repo tags
-golden tests and runs them on Linux via `melos run test:golden`).
+Font *metrics* are deterministic, but glyph rasterization is not bit-exact
+across operating systems — even with the default FlutterTest font. Keep
+recording and comparison on the same OS.
 
 ## Filtering and sharding
 
@@ -123,17 +128,22 @@ await testShowfase(
 );
 ```
 
-## Using an external diff tool (reg-suit etc.)
+## Record-only mode + external diff tool (reg-suit etc.)
 
 `--update-goldens` never compares — it only writes PNGs — so you can skip
 committing goldens entirely and let a tool like
-[reg-suit](https://github.com/reg-viz/reg-suit) manage baselines:
+[reg-suit](https://github.com/reg-viz/reg-suit) manage baselines (this is how
+playbook-flutter's own CI operates, and what this repository does — see the
+`snapshot` melos script and the `Take snapshots` CI step):
 
 ```bash
 rm -rf test/snapshots          # drop snapshots of deleted previews
 flutter test --update-goldens  # capture
-# hand test/snapshots/ to reg-suit for comparison & PR report
+# hand test/snapshots/ to reg-suit for comparison & PR report,
+# or upload as a CI artifact for manual review
 ```
+
+Running always on one OS (CI) keeps both sides of the diff pixel-compatible.
 
 ## API
 

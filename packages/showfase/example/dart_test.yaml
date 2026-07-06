@@ -1,4 +1,4 @@
 tags:
-  # Golden (snapshot) tests. They load real fonts, so record baselines on the
-  # same OS that CI compares on: `melos run test:golden:update`.
+  # Snapshot (record-only) tests. Run via `melos run snapshot`, which always
+  # passes --update-goldens; the PNGs are build artifacts, not baselines.
   golden: {}

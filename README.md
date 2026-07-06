@@ -162,12 +162,20 @@ Future<void> main() async {
 }
 ```
 
-Record baselines with `flutter test --update-goldens`, then plain
-`flutter test` fails on any visual diff. Snapshots are written to
-`test/snapshots/<device>/<group>/<name>.png`. See
-[`packages/showfase_test`](packages/showfase_test) for devices, sizing rules,
-sharding, and using an external diff tool such as reg-suit instead of
-committed goldens.
+Snapshots are written to `test/snapshots/<device>/<group>/<name>.png`. Two
+ways to run it:
+
+* **Record-only (what this repo does)**: always run with `--update-goldens`
+  on a single OS (CI) and hand the PNGs to an external diff tool such as
+  [reg-suit](https://github.com/reg-viz/reg-suit), or review them as CI
+  artifacts. Rendering (text anti-aliasing) differs slightly across operating
+  systems, so baselines and comparisons must come from the same OS.
+* **Committed goldens**: record with `--update-goldens`, commit the PNGs, and
+  let plain `flutter test` fail on any visual diff — viable when everyone
+  records on the same OS as CI.
+
+See [`packages/showfase_test`](packages/showfase_test) for devices, sizing
+rules, and sharding.
 
 ## Multi-package projects
 
@@ -202,12 +210,11 @@ and issues a matching release each Flutter stable.
 ```bash
 mise use               # activates pinned Flutter 3.41.6 + Dart 3.11.1
 dart pub get
-melos run analyze             # dart analyze everywhere
-melos run test                # dart test everywhere
-melos run test:flutter        # flutter test for Flutter packages (excl. golden)
-melos run test:golden         # golden tests against committed baselines
-melos run test:golden:update  # re-record golden baselines
-melos run build               # regenerate the example's showfase.g.dart
+melos run analyze      # dart analyze everywhere
+melos run test         # dart test everywhere
+melos run test:flutter # flutter test for Flutter packages (excl. snapshots)
+melos run snapshot     # take catalog snapshots (record-only, CI uploads them)
+melos run build        # regenerate the example's showfase.g.dart
 ```
 
 ## License

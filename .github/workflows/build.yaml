@@ -43,8 +43,14 @@ jobs:
       - name: Test (Flutter)
         run: dart run melos run test:flutter --no-select
 
-      - name: Test (golden)
-        run: dart run melos run test:golden --no-select
+      - name: Take snapshots
+        run: dart run melos run snapshot --no-select
+
+      - name: Upload snapshots
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: snapshots
+          path: packages/showfase/example/test/snapshots
 
       - name: Verify generated files are up to date
         run: dart run melos run build:verify --no-select
