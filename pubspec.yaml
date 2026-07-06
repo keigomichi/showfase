@@ -9,6 +9,7 @@ workspace:
   - packages/showfase_annotation
   - packages/showfase_generator
   - packages/showfase
+  - packages/showfase_test
   - packages/showfase/example
 
 dev_dependencies:
@@ -30,10 +31,16 @@ melos:
         dirExists: test
         noDependsOn: flutter
     test:flutter:
-      description: Run Flutter widget tests.
-      exec: flutter test
+      description: Run Flutter widget tests (excluding golden tests).
+      exec: flutter test --exclude-tags golden
       packageFilters:
         dependsOn: flutter
+        dirExists: test
+    snapshot:
+      description: Take catalog snapshots (record-only; PNGs land in test/snapshots).
+      exec: rm -rf test/snapshots && flutter test --tags golden --update-goldens
+      packageFilters:
+        dependsOn: showfase_test
         dirExists: test
     format:
       description: Format all Dart files.

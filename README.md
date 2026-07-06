@@ -18,7 +18,8 @@ This repository is a pub workspace + melos monorepo:
 | [`showfase_annotation`](packages/showfase_annotation) | Anchor annotation (`@ShowfaseRoot`). Pure Dart. |
 | [`showfase_generator`](packages/showfase_generator) | `build_runner` code generator that collects `@Preview` widgets. |
 | [`showfase`](packages/showfase) | Flutter runtime (`ShowfaseApp`, `ShowfaseBrowser`, preview detail screen). |
-| [`packages/showfase/example`](packages/showfase/example) | Demo app with committed generated file. |
+| [`showfase_test`](packages/showfase_test) | Golden (snapshot) testing — renders every preview offscreen for visual regression tests. |
+| [`packages/showfase/example`](packages/showfase/example) | Demo app with committed generated file and golden tests. |
 
 ## Architecture
 
@@ -131,6 +132,51 @@ The detail screen for each preview lets you toggle:
 * Right-to-left layout
 * Locale (when the preview supplies `localizations`)
 
+## Golden testing (Visual Regression Testing)
+
+`showfase_test` turns the generated catalog into golden tests: one test per
+preview × device, compared against committed PNG baselines with
+`matchesGoldenFile`.
+
+```yaml
+# pubspec.yaml
+dev_dependencies:
+  showfase_test: 0.1.0
+```
+
+```dart
+// test/showfase_test.dart
+import 'package:flutter/material.dart';
+import 'package:my_app/showfase.g.dart';
+import 'package:showfase_test/showfase_test.dart';
+
+Future<void> main() async {
+  await testShowfase(
+    showfasePreviews(),
+    devices: [SnapshotDevice.iPhone15],
+    builder: (preview, device) => MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(body: preview),
+    ),
+  );
+}
+```
+
+Snapshots are written to `test/snapshots/<device>/<group>/<name>.png`. Two
+ways to run it:
+
+* **Record-only (what this repo does)**: always run with `--update-goldens`
+  on a single OS (CI) and hand the PNGs to an external diff tool such as
+  [reg-suit](https://github.com/reg-viz/reg-suit), or review them as CI
+  artifacts. Rendering (text anti-aliasing) differs slightly across operating
+  systems, so baselines and comparisons must come from the same OS.
+* **Committed goldens**: record with `--update-goldens`, commit the PNGs, and
+  let plain `flutter test` fail on any visual diff — viable when everyone
+  records on the same OS as CI.
+
+See [`packages/showfase_test`](packages/showfase_test) for devices, sizing
+rules, and sharding.
+
 ## Multi-package projects
 
 v1 aggregates only inside the package that hosts `@ShowfaseRoot`. To include
@@ -166,7 +212,8 @@ mise use               # activates pinned Flutter 3.41.6 + Dart 3.11.1
 dart pub get
 melos run analyze      # dart analyze everywhere
 melos run test         # dart test everywhere
-melos run test:flutter # flutter test for Flutter packages
+melos run test:flutter # flutter test for Flutter packages (excl. snapshots)
+melos run snapshot     # take catalog snapshots (record-only, CI uploads them)
 melos run build        # regenerate the example's showfase.g.dart
 ```
 

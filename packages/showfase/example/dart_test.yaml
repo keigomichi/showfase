@@ -1,0 +1,4 @@
+tags:
+  # Snapshot (record-only) tests. Run via `melos run snapshot`, which always
+  # passes --update-goldens; the PNGs are build artifacts, not baselines.
+  golden: {}

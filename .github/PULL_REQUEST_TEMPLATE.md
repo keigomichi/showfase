@@ -11,8 +11,9 @@
 - [ ] `showfase` (runtime)
 - [ ] `showfase_generator` (build_runner)
 - [ ] `showfase_annotation`
+- [ ] `showfase_test` (golden testing)
 - [ ] `packages/showfase/example`
-- [ ] repo tooling / docs (melos, workspace, `.github/`, README, DESIGN)
+- [ ] repo tooling / docs (melos, workspace, `.github/`, README)
 
 ## Screenshots or clips
 
