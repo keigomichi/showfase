@@ -1,0 +1,27 @@
+name: showfase
+description: Flutter UI catalog runtime — turns Flutter's @Preview widgets into a browsable app that runs on mobile, desktop, and web.
+version: 0.1.0
+repository: https://github.com/keigomichi/showfase
+issue_tracker: https://github.com/keigomichi/showfase/issues
+topics:
+  - preview
+  - ui-catalog
+  - showkase
+  - design-system
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.38.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: 1.17.0
+  showfase_annotation: 0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 6.0.0
