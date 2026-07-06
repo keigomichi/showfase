@@ -37,7 +37,8 @@ class _PreviewDetailScreenState extends State<PreviewDetailScreen> {
     }
   }
 
-  Brightness? _resolvedBrightness(BuildContext context) => switch (_brightnessMode) {
+  Brightness? _resolvedBrightness(BuildContext context) =>
+      switch (_brightnessMode) {
         _BrightnessMode.system => null,
         _BrightnessMode.light => Brightness.light,
         _BrightnessMode.dark => Brightness.dark,
@@ -134,12 +135,16 @@ class _Controls extends StatelessWidget {
           const SizedBox(height: 4),
           SegmentedButton<_BrightnessMode>(
             segments: const <ButtonSegment<_BrightnessMode>>[
-              ButtonSegment(value: _BrightnessMode.system, label: Text('System')),
+              ButtonSegment(
+                value: _BrightnessMode.system,
+                label: Text('System'),
+              ),
               ButtonSegment(value: _BrightnessMode.light, label: Text('Light')),
               ButtonSegment(value: _BrightnessMode.dark, label: Text('Dark')),
             ],
             selected: <_BrightnessMode>{brightnessMode},
-            onSelectionChanged: (Set<_BrightnessMode> s) => onBrightnessMode(s.first),
+            onSelectionChanged: (Set<_BrightnessMode> s) =>
+                onBrightnessMode(s.first),
           ),
           const SizedBox(height: 16),
           Text(

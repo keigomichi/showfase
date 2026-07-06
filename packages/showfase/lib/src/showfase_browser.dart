@@ -35,14 +35,17 @@ class _ShowfaseBrowserState extends State<ShowfaseBrowser> {
     if (_query.isEmpty) return widget.previews;
     final String q = _query.toLowerCase();
     return widget.previews
-        .where((ShowfasePreview p) =>
-            (p.name ?? '').toLowerCase().contains(q) ||
-            p.group.toLowerCase().contains(q))
+        .where(
+          (ShowfasePreview p) =>
+              (p.name ?? '').toLowerCase().contains(q) ||
+              p.group.toLowerCase().contains(q),
+        )
         .toList(growable: false);
   }
 
   Map<String, List<ShowfasePreview>> get _grouped {
-    final Map<String, List<ShowfasePreview>> map = <String, List<ShowfasePreview>>{};
+    final Map<String, List<ShowfasePreview>> map =
+        <String, List<ShowfasePreview>>{};
     for (final ShowfasePreview p in _filtered) {
       map.putIfAbsent(p.group, () => <ShowfasePreview>[]).add(p);
     }
@@ -90,7 +93,8 @@ class _ShowfaseBrowserState extends State<ShowfaseBrowser> {
           ? const _EmptyState()
           : ListView(
               children: <Widget>[
-                for (final MapEntry<String, List<ShowfasePreview>> entry in groups.entries)
+                for (final MapEntry<String, List<ShowfasePreview>> entry
+                    in groups.entries)
                   _GroupSection(group: entry.key, previews: entry.value),
               ],
             ),
@@ -113,8 +117,9 @@ class _GroupSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
           child: Text(
             '$group  ·  ${previews.length}',
-            style: theme.textTheme.titleSmall
-                ?.copyWith(color: theme.colorScheme.primary),
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.primary,
+            ),
           ),
         ),
         for (final ShowfasePreview p in previews) _PreviewCard(preview: p),

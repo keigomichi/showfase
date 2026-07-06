@@ -15,10 +15,7 @@ class AppScope extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.purple, width: 2),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: child,
-      ),
+      child: Padding(padding: const EdgeInsets.all(12), child: child),
     );
   }
 }
@@ -26,6 +23,6 @@ class AppScope extends StatelessWidget {
 /// Preview using a top-level static wrapper function.
 @Preview(name: 'With wrapper', group: 'Scopes', wrapper: AppScope.wrap)
 Widget wrappedPreview() => const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text('This widget is wrapped by AppScope'),
-    );
+  padding: EdgeInsets.all(8),
+  child: Text('This widget is wrapped by AppScope'),
+);

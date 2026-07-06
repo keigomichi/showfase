@@ -37,8 +37,12 @@ class ShowfaseApp extends StatelessWidget {
     return MaterialApp(
       title: title,
       theme: theme ?? ThemeData(colorSchemeSeed: Colors.indigo),
-      darkTheme: darkTheme ??
-          ThemeData(colorSchemeSeed: Colors.indigo, brightness: Brightness.dark),
+      darkTheme:
+          darkTheme ??
+          ThemeData(
+            colorSchemeSeed: Colors.indigo,
+            brightness: Brightness.dark,
+          ),
       themeMode: themeMode,
       home: ShowfaseBrowser(previews: previews, title: title),
     );

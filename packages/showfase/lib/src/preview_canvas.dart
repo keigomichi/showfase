@@ -49,7 +49,9 @@ class ShowfasePreviewCanvas extends StatelessWidget {
 
     // Theme.
     final Brightness effectiveBrightness =
-        brightnessOverride ?? data.brightness ?? MediaQuery.platformBrightnessOf(context);
+        brightnessOverride ??
+        data.brightness ??
+        MediaQuery.platformBrightnessOf(context);
     child = _applyTheme(context, data, effectiveBrightness, child);
 
     // Localizations.
@@ -59,9 +61,9 @@ class ShowfasePreviewCanvas extends StatelessWidget {
     final double? scaleFactor = textScaleFactorOverride ?? data.textScaleFactor;
     if (scaleFactor != null) {
       child = MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: TextScaler.linear(scaleFactor),
-        ),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: TextScaler.linear(scaleFactor)),
         child: child,
       );
     }
@@ -89,8 +91,8 @@ class ShowfasePreviewCanvas extends StatelessWidget {
   ) {
     final PreviewThemeData? themeData = data.theme?.call();
     if (themeData == null) return child;
-    final (ThemeData? material, CupertinoThemeData? cupertino) =
-        themeData.themeForBrightness(brightness);
+    final (ThemeData? material, CupertinoThemeData? cupertino) = themeData
+        .themeForBrightness(brightness);
     if (material != null) {
       child = Theme(data: material, child: child);
     }
@@ -100,22 +102,20 @@ class ShowfasePreviewCanvas extends StatelessWidget {
     return child;
   }
 
-  Widget _applyLocalizations(
-    Preview data,
-    Locale? override,
-    Widget child,
-  ) {
+  Widget _applyLocalizations(Preview data, Locale? override, Widget child) {
     final PreviewLocalizationsData? loc = data.localizations?.call();
     if (loc == null && override == null) return child;
-    final Locale locale = override ??
+    final Locale locale =
+        override ??
         loc?.locale ??
         (loc?.supportedLocales.first ?? const Locale('en', 'US'));
-    final Iterable<LocalizationsDelegate<Object?>> delegates = <LocalizationsDelegate<Object?>>[
-      DefaultMaterialLocalizations.delegate,
-      DefaultCupertinoLocalizations.delegate,
-      DefaultWidgetsLocalizations.delegate,
-      ...?loc?.localizationsDelegates,
-    ];
+    final Iterable<LocalizationsDelegate<Object?>> delegates =
+        <LocalizationsDelegate<Object?>>[
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+          ...?loc?.localizationsDelegates,
+        ];
     return Localizations(
       locale: locale,
       delegates: delegates.toList(growable: false),

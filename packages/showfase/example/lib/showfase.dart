@@ -16,8 +16,5 @@ import 'widgets/scoped.dart';
 
 @ShowfaseRoot()
 void main() => runApp(
-      ShowfaseApp(
-        title: 'showfase example',
-        previews: showfasePreviews(),
-      ),
-    );
+  ShowfaseApp(title: 'showfase example', previews: showfasePreviews()),
+);

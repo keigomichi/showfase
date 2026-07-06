@@ -62,7 +62,10 @@ ConstNode encodeConstant(DartObject object) {
       if (e.key == null || e.value == null) {
         throw ConstEncodingException('Map entry has null key or value');
       }
-      entries.add((key: encodeConstant(e.key!), value: encodeConstant(e.value!)));
+      entries.add((
+        key: encodeConstant(e.key!),
+        value: encodeConstant(e.value!),
+      ));
     }
     return ConstMap(entries: entries);
   }
@@ -101,10 +104,7 @@ ConstNode encodeConstant(DartObject object) {
 ConstType _encodeType(DartType type) {
   final String symbol = type.getDisplayString();
   final Element? element = _typeElement(type);
-  return ConstType(
-    symbol: symbol,
-    libraryUri: _libraryUriOf(element),
-  );
+  return ConstType(symbol: symbol, libraryUri: _libraryUriOf(element));
 }
 
 Element? _typeElement(DartType type) {
@@ -143,10 +143,7 @@ ConstTearoff _encodeTearoff(ExecutableElement fn) {
   } else {
     name = fn.displayName;
   }
-  return ConstTearoff(
-    name: name,
-    libraryUri: fn.library.uri.toString(),
-  );
+  return ConstTearoff(name: name, libraryUri: fn.library.uri.toString());
 }
 
 ConstInstance _encodeInstance(DartType type, ConstructorInvocation invocation) {
@@ -163,7 +160,8 @@ ConstInstance _encodeInstance(DartType type, ConstructorInvocation invocation) {
         .map(encodeConstant)
         .toList(growable: false),
     named: <String, ConstNode>{
-      for (final MapEntry<String, DartObject> e in invocation.namedArguments.entries)
+      for (final MapEntry<String, DartObject> e
+          in invocation.namedArguments.entries)
         e.key: encodeConstant(e.value),
     },
   );

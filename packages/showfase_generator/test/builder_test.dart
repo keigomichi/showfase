@@ -53,7 +53,11 @@ import 'package:showfase_annotation/showfase_annotation.dart';
 void main() {}
 ''',
     });
-    expect(r.generated, isNotNull, reason: 'showfase.g.dart should be generated');
+    expect(
+      r.generated,
+      isNotNull,
+      reason: 'showfase.g.dart should be generated',
+    );
     expect(r.generated, contains('showfasePreviews'));
     expect(r.generated, contains("name: 'Primary'"));
     expect(r.generated, contains("group: 'Buttons'"));
@@ -94,10 +98,11 @@ void main() {}
     expect(r.generated, contains('BrightnessPreview'));
   });
 
-  test('emits static-method and constructor previews with qualified names',
-      () async {
-    final _RunResult r = await _run(<String, Object>{
-      'my_app|lib/foo.dart': '''
+  test(
+    'emits static-method and constructor previews with qualified names',
+    () async {
+      final _RunResult r = await _run(<String, Object>{
+        'my_app|lib/foo.dart': '''
 import 'package:flutter/widgets.dart';
 import 'package:flutter/widget_previews.dart';
 
@@ -110,18 +115,19 @@ class MyWidget extends Widget {
   static Widget staticPreview() => const Widget();
 }
 ''',
-      'my_app|lib/showfase.dart': '''
+        'my_app|lib/showfase.dart': '''
 import 'package:showfase/showfase.dart';
 import 'package:showfase_annotation/showfase_annotation.dart';
 
 @ShowfaseRoot()
 void main() {}
 ''',
-    });
-    expect(r.generated, isNotNull);
-    expect(r.generated, contains('MyWidget.preview'));
-    expect(r.generated, contains('MyWidget.staticPreview'));
-  });
+      });
+      expect(r.generated, isNotNull);
+      expect(r.generated, contains('MyWidget.preview'));
+      expect(r.generated, contains('MyWidget.staticPreview'));
+    },
+  );
 
   test('errors on multiple @ShowfaseRoot annotations in one library', () async {
     final _RunResult r = await _run(<String, Object>{
@@ -135,7 +141,11 @@ void first() {}
 void second() {}
 ''',
     });
-    expect(r.generated, isNull, reason: 'errored builds should not emit output');
+    expect(
+      r.generated,
+      isNull,
+      reason: 'errored builds should not emit output',
+    );
     expect(
       r.logs.map((LogRecord l) => l.message).join('\n'),
       contains('Found 2 @ShowfaseRoot annotations'),

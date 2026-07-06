@@ -57,13 +57,14 @@ List<PreviewMetadata> scanLibraryForPreviews(
       final String? rawCtor = c.name;
       final String qualifiedName =
           (rawCtor == null || rawCtor.isEmpty || rawCtor == 'new')
-              ? className
-              : '$className.$rawCtor';
+          ? className
+          : '$className.$rawCtor';
       _collectFrom(
         c,
         kind: PreviewElementKind.constructor,
         qualifiedName: qualifiedName,
-        returnType: null, // Not applicable — constructors always return the class.
+        returnType:
+            null, // Not applicable — constructors always return the class.
         formalParameters: c.formalParameters,
         libraryUri: libraryUri,
         out: out,
@@ -169,10 +170,7 @@ _ReturnKind _classifyReturnType(DartType? type) {
 ///
 /// Kept out of [scanLibraryForPreviews] to keep the core logic testable
 /// without a `BuildStep` instance.
-List<PreviewMetadata> scanForBuildStep(
-  LibraryElement library,
-  BuildStep step,
-) {
+List<PreviewMetadata> scanForBuildStep(LibraryElement library, BuildStep step) {
   final String path = step.inputId.toString();
   return scanLibraryForPreviews(
     library,

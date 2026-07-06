@@ -7,7 +7,8 @@ library;
 export 'package:flutter/widget_previews.dart'
     show MultiPreview, Preview, PreviewLocalizationsData, PreviewThemeData;
 
-export 'src/build_helpers.dart' show buildShowfaseMultiPreview, buildShowfasePreview;
+export 'src/build_helpers.dart'
+    show buildShowfaseMultiPreview, buildShowfasePreview;
 export 'src/preview_canvas.dart' show ShowfasePreviewCanvas;
 export 'src/preview_detail_screen.dart' show PreviewDetailScreen;
 export 'src/showfase_app.dart' show ShowfaseApp;

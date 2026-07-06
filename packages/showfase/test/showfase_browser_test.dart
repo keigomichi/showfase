@@ -5,37 +5,30 @@ import 'package:showfase/showfase.dart';
 const _buttonKey = ValueKey<String>('button');
 const _cardKey = ValueKey<String>('card');
 
-Widget _buttonPreview() => Container(
-      key: _buttonKey,
-      width: 120,
-      height: 40,
-      color: Colors.blue,
-    );
-Widget _cardPreview() => Container(
-      key: _cardKey,
-      width: 200,
-      height: 100,
-      color: Colors.red,
-    );
+Widget _buttonPreview() =>
+    Container(key: _buttonKey, width: 120, height: 40, color: Colors.blue);
+Widget _cardPreview() =>
+    Container(key: _cardKey, width: 200, height: 100, color: Colors.red);
 
 ShowfasePreview _buttonEntry() => const ShowfasePreview(
-      id: 'a#button',
-      previewData: Preview(name: 'Primary', group: 'Buttons'),
-      builder: _buttonPreview,
-    );
+  id: 'a#button',
+  previewData: Preview(name: 'Primary', group: 'Buttons'),
+  builder: _buttonPreview,
+);
 
 ShowfasePreview _cardEntry() => const ShowfasePreview(
-      id: 'a#card',
-      previewData: Preview(name: 'Wide', group: 'Cards'),
-      builder: _cardPreview,
-    );
+  id: 'a#card',
+  previewData: Preview(name: 'Wide', group: 'Cards'),
+  builder: _cardPreview,
+);
 
 void main() {
-  testWidgets('lists previews grouped, and navigates to detail', (tester) async {
-    await tester.pumpWidget(ShowfaseApp(previews: <ShowfasePreview>[
-      _buttonEntry(),
-      _cardEntry(),
-    ]));
+  testWidgets('lists previews grouped, and navigates to detail', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ShowfaseApp(previews: <ShowfasePreview>[_buttonEntry(), _cardEntry()]),
+    );
     await tester.pumpAndSettle();
     expect(find.text('Buttons  ·  1'), findsOneWidget);
     expect(find.text('Cards  ·  1'), findsOneWidget);
@@ -49,10 +42,9 @@ void main() {
   });
 
   testWidgets('search filters previews by name', (tester) async {
-    await tester.pumpWidget(ShowfaseApp(previews: <ShowfasePreview>[
-      _buttonEntry(),
-      _cardEntry(),
-    ]));
+    await tester.pumpWidget(
+      ShowfaseApp(previews: <ShowfasePreview>[_buttonEntry(), _cardEntry()]),
+    );
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byType(TextField), 'card');
@@ -63,7 +55,9 @@ void main() {
   });
 
   testWidgets('detail screen renders text-scale control', (tester) async {
-    await tester.pumpWidget(ShowfaseApp(previews: <ShowfasePreview>[_buttonEntry()]));
+    await tester.pumpWidget(
+      ShowfaseApp(previews: <ShowfasePreview>[_buttonEntry()]),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Primary'));
     await tester.pumpAndSettle();
@@ -77,9 +71,11 @@ void main() {
       previewData: Preview(name: 'Sized', size: Size(80, 30)),
       builder: _buttonPreview,
     );
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(body: ShowfasePreviewCanvas(preview: sized)),
-    ));
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: ShowfasePreviewCanvas(preview: sized)),
+      ),
+    );
     await tester.pumpAndSettle();
     final Size sizeOf = tester.getSize(find.byKey(_buttonKey));
     expect(sizeOf.width, closeTo(80, 0.5));
