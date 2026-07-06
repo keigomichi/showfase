@@ -20,8 +20,8 @@ class PreviewScannerBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => const <String, List<String>>{
-        '.dart': <String>['.showfase.json'],
-      };
+    '.dart': <String>['.showfase.json'],
+  };
 
   @override
   Future<void> build(BuildStep step) async {

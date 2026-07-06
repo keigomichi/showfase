@@ -22,7 +22,9 @@ class PrimaryButton extends StatelessWidget {
 
   /// A top-level constructor preview.
   @Preview(name: 'Constructor preview', group: 'Buttons')
-  const PrimaryButton.preview({super.key}) : label = 'Continue', onPressed = null;
+  const PrimaryButton.preview({super.key})
+    : label = 'Continue',
+      onPressed = null;
 
   /// A factory preview producing a longer label.
   @Preview(name: 'Factory preview', group: 'Buttons')
@@ -42,5 +44,6 @@ Widget simpleButtonPreview() => const PrimaryButton(label: 'Tap me');
 /// A `WidgetBuilder`-returning preview.
 @Preview(name: 'Builder-returning', group: 'Buttons')
 WidgetBuilder builderButtonPreview() =>
-    (BuildContext context) =>
-        PrimaryButton(label: 'Using ${Theme.of(context).brightness.name} theme');
+    (BuildContext context) => PrimaryButton(
+      label: 'Using ${Theme.of(context).brightness.name} theme',
+    );

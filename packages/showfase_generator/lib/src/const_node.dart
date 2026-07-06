@@ -34,52 +34,52 @@ sealed class ConstNode {
       'string' => ConstString(json['value']! as String),
       'symbol' => ConstSymbol(json['value']! as String),
       'type' => ConstType(
-          symbol: json['symbol']! as String,
-          libraryUri: json['libraryUri'] as String?,
-        ),
+        symbol: json['symbol']! as String,
+        libraryUri: json['libraryUri'] as String?,
+      ),
       'enum' => ConstEnum(
-          symbol: json['symbol']! as String,
-          libraryUri: json['libraryUri']! as String,
-          value: json['value']! as String,
-        ),
+        symbol: json['symbol']! as String,
+        libraryUri: json['libraryUri']! as String,
+        value: json['value']! as String,
+      ),
       'tearoff' => ConstTearoff(
-          name: json['name']! as String,
-          libraryUri: json['libraryUri'] as String?,
-        ),
+        name: json['name']! as String,
+        libraryUri: json['libraryUri'] as String?,
+      ),
       'list' => ConstList(
-          (json['items']! as List<Object?>)
-              .map((e) => ConstNode.fromJson(e! as Map<String, Object?>))
-              .toList(),
-          elementTypeSymbol: json['elementTypeSymbol'] as String?,
-          elementTypeLibraryUri: json['elementTypeLibraryUri'] as String?,
-        ),
+        (json['items']! as List<Object?>)
+            .map((e) => ConstNode.fromJson(e! as Map<String, Object?>))
+            .toList(),
+        elementTypeSymbol: json['elementTypeSymbol'] as String?,
+        elementTypeLibraryUri: json['elementTypeLibraryUri'] as String?,
+      ),
       'set' => ConstSet(
-          (json['items']! as List<Object?>)
-              .map((e) => ConstNode.fromJson(e! as Map<String, Object?>))
-              .toList(),
-          elementTypeSymbol: json['elementTypeSymbol'] as String?,
-          elementTypeLibraryUri: json['elementTypeLibraryUri'] as String?,
-        ),
+        (json['items']! as List<Object?>)
+            .map((e) => ConstNode.fromJson(e! as Map<String, Object?>))
+            .toList(),
+        elementTypeSymbol: json['elementTypeSymbol'] as String?,
+        elementTypeLibraryUri: json['elementTypeLibraryUri'] as String?,
+      ),
       'map' => ConstMap(
-          entries: (json['entries']! as List<Object?>).map((e) {
-            final Map<String, Object?> pair = e! as Map<String, Object?>;
-            return (
-              key: ConstNode.fromJson(pair['key']! as Map<String, Object?>),
-              value: ConstNode.fromJson(pair['value']! as Map<String, Object?>),
-            );
-          }).toList(),
-        ),
+        entries: (json['entries']! as List<Object?>).map((e) {
+          final Map<String, Object?> pair = e! as Map<String, Object?>;
+          return (
+            key: ConstNode.fromJson(pair['key']! as Map<String, Object?>),
+            value: ConstNode.fromJson(pair['value']! as Map<String, Object?>),
+          );
+        }).toList(),
+      ),
       'instance' => ConstInstance(
-          symbol: json['symbol']! as String,
-          libraryUri: json['libraryUri']! as String,
-          constructor: json['constructor'] as String?,
-          positional: (json['positional']! as List<Object?>)
-              .map((e) => ConstNode.fromJson(e! as Map<String, Object?>))
-              .toList(),
-          named: (json['named']! as Map<String, Object?>).map(
-            (k, v) => MapEntry(k, ConstNode.fromJson(v! as Map<String, Object?>)),
-          ),
+        symbol: json['symbol']! as String,
+        libraryUri: json['libraryUri']! as String,
+        constructor: json['constructor'] as String?,
+        positional: (json['positional']! as List<Object?>)
+            .map((e) => ConstNode.fromJson(e! as Map<String, Object?>))
+            .toList(),
+        named: (json['named']! as Map<String, Object?>).map(
+          (k, v) => MapEntry(k, ConstNode.fromJson(v! as Map<String, Object?>)),
         ),
+      ),
       _ => throw StateError('Unknown ConstNode type: $type'),
     };
   }
@@ -95,14 +95,20 @@ final class ConstBool extends ConstNode {
   const ConstBool(this.value);
   final bool value;
   @override
-  Map<String, Object?> toJson() => <String, Object?>{'type': 'bool', 'value': value};
+  Map<String, Object?> toJson() => <String, Object?>{
+    'type': 'bool',
+    'value': value,
+  };
 }
 
 final class ConstInt extends ConstNode {
   const ConstInt(this.value);
   final int value;
   @override
-  Map<String, Object?> toJson() => <String, Object?>{'type': 'int', 'value': value};
+  Map<String, Object?> toJson() => <String, Object?>{
+    'type': 'int',
+    'value': value,
+  };
 }
 
 final class ConstDouble extends ConstNode {
@@ -110,11 +116,11 @@ final class ConstDouble extends ConstNode {
   final double value;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'double',
-        // JSON has no representation for non-finite doubles, so serialize
-        // them as tagged strings and reconstruct on decode.
-        'value': value.isFinite ? value : _encodeSpecial(value),
-      };
+    'type': 'double',
+    // JSON has no representation for non-finite doubles, so serialize
+    // them as tagged strings and reconstruct on decode.
+    'value': value.isFinite ? value : _encodeSpecial(value),
+  };
 }
 
 Object _encodeSpecial(double v) {
@@ -141,16 +147,20 @@ final class ConstString extends ConstNode {
   const ConstString(this.value);
   final String value;
   @override
-  Map<String, Object?> toJson() =>
-      <String, Object?>{'type': 'string', 'value': value};
+  Map<String, Object?> toJson() => <String, Object?>{
+    'type': 'string',
+    'value': value,
+  };
 }
 
 final class ConstSymbol extends ConstNode {
   const ConstSymbol(this.value);
   final String value;
   @override
-  Map<String, Object?> toJson() =>
-      <String, Object?>{'type': 'symbol', 'value': value};
+  Map<String, Object?> toJson() => <String, Object?>{
+    'type': 'symbol',
+    'value': value,
+  };
 }
 
 final class ConstType extends ConstNode {
@@ -159,10 +169,10 @@ final class ConstType extends ConstNode {
   final String? libraryUri;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'type',
-        'symbol': symbol,
-        if (libraryUri != null) 'libraryUri': libraryUri,
-      };
+    'type': 'type',
+    'symbol': symbol,
+    if (libraryUri != null) 'libraryUri': libraryUri,
+  };
 }
 
 /// A reference to an enum constant, e.g. `Brightness.dark`.
@@ -177,11 +187,11 @@ final class ConstEnum extends ConstNode {
   final String value;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'enum',
-        'symbol': symbol,
-        'libraryUri': libraryUri,
-        'value': value,
-      };
+    'type': 'enum',
+    'symbol': symbol,
+    'libraryUri': libraryUri,
+    'value': value,
+  };
 }
 
 /// A reference to a top-level or static function, emitted as a tear-off.
@@ -193,40 +203,48 @@ final class ConstTearoff extends ConstNode {
   final String? libraryUri;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'tearoff',
-        'name': name,
-        if (libraryUri != null) 'libraryUri': libraryUri,
-      };
+    'type': 'tearoff',
+    'name': name,
+    if (libraryUri != null) 'libraryUri': libraryUri,
+  };
 }
 
 final class ConstList extends ConstNode {
-  const ConstList(this.items, {this.elementTypeSymbol, this.elementTypeLibraryUri});
+  const ConstList(
+    this.items, {
+    this.elementTypeSymbol,
+    this.elementTypeLibraryUri,
+  });
   final List<ConstNode> items;
   final String? elementTypeSymbol;
   final String? elementTypeLibraryUri;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'list',
-        'items': items.map((n) => n.toJson()).toList(),
-        if (elementTypeSymbol != null) 'elementTypeSymbol': elementTypeSymbol,
-        if (elementTypeLibraryUri != null)
-          'elementTypeLibraryUri': elementTypeLibraryUri,
-      };
+    'type': 'list',
+    'items': items.map((n) => n.toJson()).toList(),
+    if (elementTypeSymbol != null) 'elementTypeSymbol': elementTypeSymbol,
+    if (elementTypeLibraryUri != null)
+      'elementTypeLibraryUri': elementTypeLibraryUri,
+  };
 }
 
 final class ConstSet extends ConstNode {
-  const ConstSet(this.items, {this.elementTypeSymbol, this.elementTypeLibraryUri});
+  const ConstSet(
+    this.items, {
+    this.elementTypeSymbol,
+    this.elementTypeLibraryUri,
+  });
   final List<ConstNode> items;
   final String? elementTypeSymbol;
   final String? elementTypeLibraryUri;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'set',
-        'items': items.map((n) => n.toJson()).toList(),
-        if (elementTypeSymbol != null) 'elementTypeSymbol': elementTypeSymbol,
-        if (elementTypeLibraryUri != null)
-          'elementTypeLibraryUri': elementTypeLibraryUri,
-      };
+    'type': 'set',
+    'items': items.map((n) => n.toJson()).toList(),
+    if (elementTypeSymbol != null) 'elementTypeSymbol': elementTypeSymbol,
+    if (elementTypeLibraryUri != null)
+      'elementTypeLibraryUri': elementTypeLibraryUri,
+  };
 }
 
 typedef ConstMapEntry = ({ConstNode key, ConstNode value});
@@ -236,14 +254,16 @@ final class ConstMap extends ConstNode {
   final List<ConstMapEntry> entries;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'map',
-        'entries': entries
-            .map((e) => <String, Object?>{
-                  'key': e.key.toJson(),
-                  'value': e.value.toJson(),
-                })
-            .toList(),
-      };
+    'type': 'map',
+    'entries': entries
+        .map(
+          (e) => <String, Object?>{
+            'key': e.key.toJson(),
+            'value': e.value.toJson(),
+          },
+        )
+        .toList(),
+  };
 }
 
 /// A const constructor invocation of a class (`Preview(...)`, `Size(...)`,
@@ -263,11 +283,11 @@ final class ConstInstance extends ConstNode {
   final Map<String, ConstNode> named;
   @override
   Map<String, Object?> toJson() => <String, Object?>{
-        'type': 'instance',
-        'symbol': symbol,
-        'libraryUri': libraryUri,
-        if (constructor != null) 'constructor': constructor,
-        'positional': positional.map((n) => n.toJson()).toList(),
-        'named': named.map((k, v) => MapEntry(k, v.toJson())),
-      };
+    'type': 'instance',
+    'symbol': symbol,
+    'libraryUri': libraryUri,
+    if (constructor != null) 'constructor': constructor,
+    'positional': positional.map((n) => n.toJson()).toList(),
+    'named': named.map((k, v) => MapEntry(k, v.toJson())),
+  };
 }

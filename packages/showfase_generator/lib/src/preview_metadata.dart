@@ -1,11 +1,7 @@
 import 'const_node.dart';
 
 /// Kind of Dart element the `@Preview` was applied to.
-enum PreviewElementKind {
-  topLevelFunction,
-  staticMethod,
-  constructor,
-}
+enum PreviewElementKind { topLevelFunction, staticMethod, constructor }
 
 /// A single preview record extracted from a source library.
 ///
@@ -57,24 +53,24 @@ class PreviewMetadata {
   final int? column;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'function': function,
-        'libraryUri': libraryUri,
-        'kind': kind.name,
-        'isBuilder': isBuilder,
-        'isMultiPreview': isMultiPreview,
-        'annotation': annotation.toJson(),
-        if (line != null) 'line': line,
-        if (column != null) 'column': column,
-      };
+    'function': function,
+    'libraryUri': libraryUri,
+    'kind': kind.name,
+    'isBuilder': isBuilder,
+    'isMultiPreview': isMultiPreview,
+    'annotation': annotation.toJson(),
+    if (line != null) 'line': line,
+    if (column != null) 'column': column,
+  };
 
   static PreviewMetadata fromJson(Map<String, Object?> json) => PreviewMetadata(
-        function: json['function']! as String,
-        libraryUri: json['libraryUri']! as String,
-        kind: PreviewElementKind.values.byName(json['kind']! as String),
-        isBuilder: json['isBuilder']! as bool,
-        isMultiPreview: json['isMultiPreview']! as bool,
-        annotation: ConstNode.fromJson(json['annotation']! as Map<String, Object?>),
-        line: json['line'] as int?,
-        column: json['column'] as int?,
-      );
+    function: json['function']! as String,
+    libraryUri: json['libraryUri']! as String,
+    kind: PreviewElementKind.values.byName(json['kind']! as String),
+    isBuilder: json['isBuilder']! as bool,
+    isMultiPreview: json['isMultiPreview']! as bool,
+    annotation: ConstNode.fromJson(json['annotation']! as Map<String, Object?>),
+    line: json['line'] as int?,
+    column: json['column'] as int?,
+  );
 }

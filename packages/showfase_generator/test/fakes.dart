@@ -120,11 +120,13 @@ Iterable<ShowfasePreview> buildShowfaseMultiPreview({
 ''';
 
 /// Common asset bundle for all end-to-end builder tests.
-Map<String, Object> buildTestAssets(Map<String, Object> extras) => <String, Object>{
-      'flutter|lib/widgets.dart': fakeFlutterWidgets,
-      'flutter|lib/src/ui.dart': fakeFlutterUi,
-      'flutter|lib/widget_previews.dart': fakeFlutterWidgetPreviews,
-      'showfase_annotation|lib/showfase_annotation.dart': fakeShowfaseAnnotation,
-      'showfase|lib/showfase.dart': fakeShowfaseRuntime,
-      ...extras,
-    };
+Map<String, Object> buildTestAssets(
+  Map<String, Object> extras,
+) => <String, Object>{
+  'flutter|lib/widgets.dart': fakeFlutterWidgets,
+  'flutter|lib/src/ui.dart': fakeFlutterUi,
+  'flutter|lib/widget_previews.dart': fakeFlutterWidgetPreviews,
+  'showfase_annotation|lib/showfase_annotation.dart': fakeShowfaseAnnotation,
+  'showfase|lib/showfase.dart': fakeShowfaseRuntime,
+  ...extras,
+};

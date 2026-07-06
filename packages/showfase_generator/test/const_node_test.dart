@@ -23,53 +23,61 @@ void main() {
     });
 
     test('enum ref', () {
-      roundTrip(const ConstEnum(
-        symbol: 'Brightness',
-        libraryUri: 'dart:ui',
-        value: 'dark',
-      ));
+      roundTrip(
+        const ConstEnum(
+          symbol: 'Brightness',
+          libraryUri: 'dart:ui',
+          value: 'dark',
+        ),
+      );
     });
 
     test('tearoff', () {
-      roundTrip(const ConstTearoff(
-        name: 'AppScope.wrap',
-        libraryUri: 'package:app/scopes.dart',
-      ));
+      roundTrip(
+        const ConstTearoff(
+          name: 'AppScope.wrap',
+          libraryUri: 'package:app/scopes.dart',
+        ),
+      );
     });
 
     test('nested instance', () {
-      roundTrip(const ConstInstance(
-        symbol: 'Preview',
-        libraryUri: 'package:flutter/widget_previews.dart',
-        named: <String, ConstNode>{
-          'name': ConstString('Primary'),
-          'size': ConstInstance(
-            symbol: 'Size',
-            libraryUri: 'dart:ui',
-            positional: <ConstNode>[ConstDouble(200), ConstDouble(100)],
-          ),
-          'brightness': ConstEnum(
-            symbol: 'Brightness',
-            libraryUri: 'dart:ui',
-            value: 'dark',
-          ),
-        },
-      ));
+      roundTrip(
+        const ConstInstance(
+          symbol: 'Preview',
+          libraryUri: 'package:flutter/widget_previews.dart',
+          named: <String, ConstNode>{
+            'name': ConstString('Primary'),
+            'size': ConstInstance(
+              symbol: 'Size',
+              libraryUri: 'dart:ui',
+              positional: <ConstNode>[ConstDouble(200), ConstDouble(100)],
+            ),
+            'brightness': ConstEnum(
+              symbol: 'Brightness',
+              libraryUri: 'dart:ui',
+              value: 'dark',
+            ),
+          },
+        ),
+      );
     });
 
     test('list', () {
-      roundTrip(const ConstList(<ConstNode>[
-        ConstInt(1),
-        ConstInt(2),
-        ConstInt(3),
-      ]));
+      roundTrip(
+        const ConstList(<ConstNode>[ConstInt(1), ConstInt(2), ConstInt(3)]),
+      );
     });
 
     test('map', () {
-      roundTrip(const ConstMap(entries: <ConstMapEntry>[
-        (key: ConstString('a'), value: ConstInt(1)),
-        (key: ConstString('b'), value: ConstInt(2)),
-      ]));
+      roundTrip(
+        const ConstMap(
+          entries: <ConstMapEntry>[
+            (key: ConstString('a'), value: ConstInt(1)),
+            (key: ConstString('b'), value: ConstInt(2)),
+          ],
+        ),
+      );
     });
   });
 }

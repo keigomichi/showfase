@@ -16,17 +16,27 @@ cb.Expression emitConst(ConstNode node) {
     ConstString(:final value) => cb.literalString(value),
     ConstSymbol(:final value) => _literalSymbol(value),
     ConstType(:final symbol, :final libraryUri) => cb.refer(symbol, libraryUri),
-    ConstEnum(:final symbol, :final libraryUri, :final value) =>
-      cb.refer('$symbol.$value', libraryUri),
+    ConstEnum(:final symbol, :final libraryUri, :final value) => cb.refer(
+      '$symbol.$value',
+      libraryUri,
+    ),
     ConstTearoff(:final name, :final libraryUri) => cb.refer(name, libraryUri),
-    ConstList(:final items, :final elementTypeSymbol, :final elementTypeLibraryUri) =>
+    ConstList(
+      :final items,
+      :final elementTypeSymbol,
+      :final elementTypeLibraryUri,
+    ) =>
       cb.literalConstList(
         items.map(emitConst).toList(growable: false),
         elementTypeSymbol == null
             ? null
             : cb.refer(elementTypeSymbol, elementTypeLibraryUri),
       ),
-    ConstSet(:final items, :final elementTypeSymbol, :final elementTypeLibraryUri) =>
+    ConstSet(
+      :final items,
+      :final elementTypeSymbol,
+      :final elementTypeLibraryUri,
+    ) =>
       cb.literalConstSet(
         items.map(emitConst).toSet(),
         elementTypeSymbol == null
@@ -34,8 +44,9 @@ cb.Expression emitConst(ConstNode node) {
             : cb.refer(elementTypeSymbol, elementTypeLibraryUri),
       ),
     ConstMap(:final entries) => cb.literalConstMap(<Object?, Object?>{
-        for (final ConstMapEntry e in entries) emitConst(e.key): emitConst(e.value),
-      }),
+      for (final ConstMapEntry e in entries)
+        emitConst(e.key): emitConst(e.value),
+    }),
     ConstInstance(
       :final symbol,
       :final libraryUri,

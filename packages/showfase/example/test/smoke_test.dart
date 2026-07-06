@@ -9,20 +9,23 @@ void main() {
     final Set<String> names = <String>{
       for (final p in list) p.name ?? '(unnamed)',
     };
-    expect(names, containsAll(<String>[
-      'Simple button',
-      'Constructor preview',
-      'Static preview',
-      'Factory preview',
-      'Builder-returning',
-      'Fixed width',
-      'Large text',
-      'Dark mode',
-      'With wrapper',
-      'Light',
-      'Dark',
-      'Stacked A',
-      'Stacked B',
-    ]));
+    expect(
+      names,
+      containsAll(<String>[
+        'Simple button',
+        'Constructor preview',
+        'Static preview',
+        'Factory preview',
+        'Builder-returning',
+        'Fixed width',
+        'Large text',
+        'Dark mode',
+        'With wrapper',
+        'Light',
+        'Dark',
+        'Stacked A',
+        'Stacked B',
+      ]),
+    );
   });
 }

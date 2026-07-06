@@ -31,21 +31,22 @@ class InfoCard extends StatelessWidget {
 /// Preview with a fixed width via `size`.
 @Preview(name: 'Fixed width', group: 'Cards', size: Size(280, double.infinity))
 Widget fixedWidthCard() => const InfoCard(
-      title: 'Announcement',
-      body: 'A message that spans multiple lines to demonstrate wrapping.',
-    );
+  title: 'Announcement',
+  body: 'A message that spans multiple lines to demonstrate wrapping.',
+);
 
 /// Preview with an amplified text scale.
 @Preview(name: 'Large text', group: 'Cards', textScaleFactor: 1.6)
 Widget largeTextCard() => const InfoCard(
-      title: 'Large text',
-      body: 'This preview forces text scale to 1.6× so it looks like a device '
-          'with accessibility text sizing enabled.',
-    );
+  title: 'Large text',
+  body:
+      'This preview forces text scale to 1.6× so it looks like a device '
+      'with accessibility text sizing enabled.',
+);
 
 /// Preview forced to dark brightness.
 @Preview(name: 'Dark mode', group: 'Cards', brightness: Brightness.dark)
 Widget darkCard() => const InfoCard(
-      title: 'Dark mode',
-      body: 'Rendered under Brightness.dark by default.',
-    );
+  title: 'Dark mode',
+  body: 'Rendered under Brightness.dark by default.',
+);

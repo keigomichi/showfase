@@ -26,8 +26,9 @@ class ShowfaseAggregator extends GeneratorForAnnotation<Object> {
 
   @override
   Future<String> generate(LibraryReader library, BuildStep buildStep) async {
-    final List<AnnotatedElement> annotated =
-        library.annotatedWith(typeChecker).toList();
+    final List<AnnotatedElement> annotated = library
+        .annotatedWith(typeChecker)
+        .toList();
     if (annotated.isEmpty) return '';
     if (annotated.length > 1) {
       throw InvalidGenerationSourceError(
@@ -95,9 +96,13 @@ String _emitLibrary(List<PreviewMetadata> previews) {
       ),
   );
 
-  final cb.DartEmitter emitter = cb.DartEmitter.scoped(useNullSafetySyntax: true);
+  final cb.DartEmitter emitter = cb.DartEmitter.scoped(
+    useNullSafetySyntax: true,
+  );
   final String source = lib.accept(emitter).toString();
-  final DartFormatter formatter = DartFormatter(languageVersion: Version(3, 11, 0));
+  final DartFormatter formatter = DartFormatter(
+    languageVersion: Version(3, 11, 0),
+  );
   return formatter.format(source);
 }
 
@@ -105,8 +110,7 @@ cb.Expression _emitEntry(PreviewMetadata p) {
   final String id = '${p.libraryUri}#${p.function}';
   final cb.Expression annotationExpr = emitConst(p.annotation);
   final cb.Expression previewClosure = cb.Method(
-    (cb.MethodBuilder m) => m
-      ..body = _invokeTargetExpression(p).code,
+    (cb.MethodBuilder m) => m..body = _invokeTargetExpression(p).code,
   ).closure;
 
   final Map<String, cb.Expression> args = <String, cb.Expression>{
@@ -118,21 +122,19 @@ cb.Expression _emitEntry(PreviewMetadata p) {
   if (p.column != null) args['column'] = cb.literalNum(p.column!);
 
   if (p.isMultiPreview) {
-    return cb
-        .refer('buildShowfaseMultiPreview', _showfaseRuntimeUri)
-        .call(<cb.Expression>[], <String, cb.Expression>{
-          ...args,
-          'multiPreview': annotationExpr,
-        })
-        .spread;
+    return cb.refer('buildShowfaseMultiPreview', _showfaseRuntimeUri).call(
+      <cb.Expression>[],
+      <String, cb.Expression>{...args, 'multiPreview': annotationExpr},
+    ).spread;
   }
-  return cb.refer('buildShowfasePreview', _showfaseRuntimeUri).call(
-    <cb.Expression>[],
-    <String, cb.Expression>{
-      ...args,
-      'transformedPreview': annotationExpr.property('transform').call(<cb.Expression>[]),
-    },
-  );
+  return cb
+      .refer('buildShowfasePreview', _showfaseRuntimeUri)
+      .call(<cb.Expression>[], <String, cb.Expression>{
+        ...args,
+        'transformedPreview': annotationExpr
+            .property('transform')
+            .call(<cb.Expression>[]),
+      });
 }
 
 cb.Expression _invokeTargetExpression(PreviewMetadata p) {

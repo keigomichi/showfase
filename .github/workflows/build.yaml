@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - uses: ostk0069/import-mise-toml-versions@f4c9d7dd9cf70a0c827f153d746ba485e5a63153 # v1.1.0
+        id: mise
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ steps.mise.outputs.flutter }}
+          channel: stable
+          cache: true
+
+      - name: Resolve workspace dependencies
+        run: dart pub get
+
+      - name: Check formatting
+        run: dart run melos run format:check
+
+      - name: Analyze
+        run: dart run melos run analyze
+
+      - name: Test (pure Dart)
+        run: dart run melos run test --no-select
+
+      - name: Test (Flutter)
+        run: dart run melos run test:flutter --no-select
+
+      - name: Verify generated files are up to date
+        run: dart run melos run build:verify --no-select

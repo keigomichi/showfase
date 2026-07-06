@@ -10,3 +10,48 @@ workspace:
   - packages/showfase_generator
   - packages/showfase
   - packages/showfase/example
+
+dev_dependencies:
+  melos: 8.0.0
+
+melos:
+  command:
+    version:
+      workspaceChangelog: true
+
+  scripts:
+    analyze:
+      description: Run static analysis across all packages.
+      exec: dart analyze
+    test:
+      description: Run tests in pure-Dart packages.
+      exec: dart test
+      packageFilters:
+        dirExists: test
+        noDependsOn: flutter
+    test:flutter:
+      description: Run Flutter widget tests.
+      exec: flutter test
+      packageFilters:
+        dependsOn: flutter
+        dirExists: test
+    format:
+      description: Format all Dart files.
+      exec: dart format .
+    format:check:
+      description: Fail if any Dart file is not formatted.
+      exec: dart format --output=none --set-exit-if-changed .
+    build:
+      description: Run build_runner in the example app.
+      exec:
+        command: dart run build_runner build --delete-conflicting-outputs
+        concurrency: 1
+      packageFilters:
+        dependsOn: build_runner
+    build:verify:
+      description: Verify generated files are up-to-date.
+      exec:
+        command: dart run build_runner build --delete-conflicting-outputs && git diff --exit-code -- '*.g.dart'
+        concurrency: 1
+      packageFilters:
+        dependsOn: build_runner
