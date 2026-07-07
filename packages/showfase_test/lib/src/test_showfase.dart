@@ -6,6 +6,7 @@ import 'package:showfase/showfase.dart';
 import 'font_builder.dart';
 import 'snapshot_device.dart';
 import 'snapshot_paths.dart';
+import 'snapshot_shard.dart';
 import 'snapshot_support.dart';
 
 /// Wraps the rendered preview in the app shell used for snapshots.
@@ -21,6 +22,12 @@ typedef SnapshotBuilder =
 /// compares against
 /// `<snapshotDir>[/<subDir>]/<device.name>/<group>/<name>.png`, resolved
 /// relative to the calling test file. Run with `--update-goldens` to record.
+///
+/// [shard] registers only that slice of the previews, for parallel runs
+/// across CI jobs and/or test files — see [SnapshotShard]. It applies after
+/// [previewFilter], and golden paths (including collision suffixes) are
+/// resolved from the full filtered list first, so a preview's path never
+/// depends on the shard configuration.
 ///
 /// ```dart
 /// Future<void> main() async {
@@ -41,6 +48,7 @@ Future<void> testShowfase(
   String snapshotDir = 'snapshots',
   String? subDir,
   bool Function(ShowfasePreview preview)? previewFilter,
+  SnapshotShard? shard,
   Map<String, List<String>> additionalFonts = const <String, List<String>>{},
   Future<void> Function(WidgetTester tester)? setUpEachTest,
 }) async {
@@ -73,6 +81,9 @@ Future<void> testShowfase(
       for (final MapEntry<String, List<int>> entry in groups.entries) {
         group(entry.key, () {
           for (final int i in entry.value) {
+            // Skipped previews still contributed to path resolution above, so
+            // collision suffixes are identical in every shard configuration.
+            if (shard != null && !shard.contains(i)) continue;
             final ShowfasePreview preview = filtered[i];
             final String goldenPath =
                 '$snapshotDir/$sub${device.name}/${paths[i]}.png';
@@ -131,12 +142,14 @@ Future<void> _takeSnapshot({
   );
 
   try {
-    await tester.runAsync(() async {
-      await SnapshotSupport.startDevice(target, tester, device);
-      await SnapshotSupport.resize(preview, tester, device);
-      await SnapshotSupport.precacheAssetImage(tester);
-      await setUpEachTest?.call(tester);
-    });
+    // Pumping and resizing run under fake async, which is faster; only image
+    // decoding (inside precacheAssetImage) and user setup get real async.
+    await SnapshotSupport.startDevice(target, tester, device, preview);
+    await SnapshotSupport.resize(preview, tester, device);
+    await SnapshotSupport.precacheAssetImage(tester);
+    if (setUpEachTest != null) {
+      await tester.runAsync(() => setUpEachTest(tester));
+    }
     await expectLater(find.byWidget(target), matchesGoldenFile(goldenPath));
   } finally {
     debugDefaultTargetPlatformOverride = null;

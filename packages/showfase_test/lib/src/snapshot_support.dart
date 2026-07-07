@@ -26,6 +26,11 @@ class _AxisSpec {
 
   bool get resizesWidth => fixedWidth == null;
   bool get resizesHeight => fixedHeight == null;
+
+  /// The surface size to render at before any content-driven growth: fixed
+  /// axes take their pinned value, compressed axes start at the device size.
+  Size initialSize(SnapshotDevice device) =>
+      Size(fixedWidth ?? device.size.width, fixedHeight ?? device.size.height);
 }
 
 /// Surface sizing and content-driven resizing for snapshot rendering.
@@ -36,13 +41,23 @@ class SnapshotSupport {
   static const double _maxSnapshotSize = 50000;
 
   /// Configures the render surface for [device] and pumps [target].
+  ///
+  /// The surface starts directly at [preview]'s target size (fixed axes
+  /// pinned, compressed axes at the device size), so the size change and the
+  /// first build settle in a single pump — previews with a fully fixed
+  /// `Preview.size` need no further resizing.
   static Future<void> startDevice(
     Widget target,
     WidgetTester tester,
     SnapshotDevice device,
+    ShowfasePreview preview,
   ) async {
+    final Size initialSize = _AxisSpec.of(preview).initialSize(device);
     tester.view.devicePixelRatio = device.pixelRatio;
-    await setSnapshotSize(tester, device.size, device.pixelRatio);
+    // No pump yet: there is nothing to lay out before the first pumpWidget,
+    // which flushes the pending metrics change together with the build.
+    await tester.binding.setSurfaceSize(initialSize);
+    tester.view.physicalSize = initialSize * device.pixelRatio;
     await tester.pumpWidget(target);
     await tester.pumpAndSettle();
   }
@@ -61,20 +76,11 @@ class SnapshotSupport {
   ) async {
     final _AxisSpec spec = _AxisSpec.of(preview);
 
-    if (!spec.resizesWidth && !spec.resizesHeight) {
-      await setSnapshotSize(
-        tester,
-        Size(spec.fixedWidth!, spec.fixedHeight!),
-        device.pixelRatio,
-      );
-      return;
-    }
+    // [startDevice] already rendered at the target size; fully fixed previews
+    // have nothing to grow.
+    if (!spec.resizesWidth && !spec.resizesHeight) return;
 
-    Size lastExtendedSize = Size(
-      spec.fixedWidth ?? device.size.width,
-      spec.fixedHeight ?? device.size.height,
-    );
-    await setSnapshotSize(tester, lastExtendedSize, device.pixelRatio);
+    Size lastExtendedSize = spec.initialSize(device);
 
     int resizeCount = 0;
     while (true) {
@@ -131,18 +137,26 @@ class SnapshotSupport {
         );
       }
     }
-    await setSnapshotSize(tester, lastExtendedSize, device.pixelRatio);
+    // The loop exits only after the last size it applied proved stable, so
+    // the surface is already at lastExtendedSize.
   }
 
   /// Decodes every `Image` in the tree before capture.
   ///
   /// See https://github.com/flutter/flutter/issues/38997.
   static Future<void> precacheAssetImage(WidgetTester tester) async {
-    for (final Element element in find.byType(Image).evaluate()) {
-      final Image widget = element.widget as Image;
-      await precacheImage(widget.image, element);
-      await tester.pumpAndSettle();
-    }
+    final List<Element> elements = find.byType(Image).evaluate().toList();
+    if (elements.isEmpty) return;
+    // Image decoding completes only under real async, so this is the one
+    // step that needs runAsync.
+    await tester.runAsync(() async {
+      for (final Element element in elements) {
+        final Image widget = element.widget as Image;
+        await precacheImage(widget.image, element);
+      }
+    });
+    // A single settle rebuilds every Image with its decoded frame.
+    await tester.pumpAndSettle();
   }
 
   /// Sets the logical surface size and the matching physical size.

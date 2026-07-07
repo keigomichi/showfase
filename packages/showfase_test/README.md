@@ -110,23 +110,48 @@ Font *metrics* are deterministic, but glyph rasterization is not bit-exact
 across operating systems — even with the default FlutterTest font. Keep
 recording and comparison on the same OS.
 
-## Filtering and sharding
+## Sharding and parallelism
 
-`previewFilter` and `subDir` support subset runs, e.g. environment-driven CI
-sharding:
+`shard:` registers only a 1-of-N slice of the previews (round-robin over the
+deterministic preview order). Golden paths — including collision suffixes —
+are resolved from the full list before slicing, so **every shard layout
+produces the same file paths as an unsharded run**: all shards can share one
+`snapshotDir`, and an external diff tool sees a stable baseline.
+
+Because each preview is its own `testWidgets` and `flutter test` runs test
+*files* concurrently, sharding parallelizes on two independent axes:
+
+**Within one machine** — put one shard per file and run the directory; all
+CPU cores are used by a single `flutter test` invocation:
 
 ```dart
-final shardIndex = int.parse(Platform.environment['SHARD_INDEX'] ?? '0');
-final totalShards = int.parse(Platform.environment['TOTAL_SHARDS'] ?? '1');
-
-var i = 0;
-await testShowfase(
-  showfasePreviews(),
-  devices: [SnapshotDevice.iPhone15],
-  previewFilter: (_) => i++ % totalShards == shardIndex,
-  builder: ...,
-);
+// test/vrt/shard0_test.dart  (…repeat for shard1..shard3 with index: k)
+Future<void> main() async {
+  await testShowfase(
+    showfasePreviews(),
+    devices: [SnapshotDevice.iPhone15],
+    shard: const SnapshotShard(index: 0, total: 4),
+    builder: ...,
+  );
+}
 ```
+
+```bash
+flutter test --update-goldens test/vrt/
+```
+
+**Across CI jobs** — select the shard from `SHARD_INDEX` / `TOTAL_SHARDS`
+(environment variables or `--dart-define`); unset means "run everything", so
+the same file works locally:
+
+```dart
+shard: SnapshotShard.fromEnvironment(),
+```
+
+Both compose: for J jobs × K files per job, give file `k` of job `j`
+`SnapshotShard(index: j * K + k, total: J * K)` (read `j` from the
+environment). Ad-hoc subset runs are still available via `previewFilter`,
+which applies before `shard`.
 
 ## Record-only mode + external diff tool (reg-suit etc.)
 
@@ -155,6 +180,7 @@ Future<void> testShowfase(
   String snapshotDir = 'snapshots',
   String? subDir,
   bool Function(ShowfasePreview)? previewFilter,
+  SnapshotShard? shard,                    // 1-of-N slice for parallel runs
   Map<String, List<String>> additionalFonts,
   Future<void> Function(WidgetTester)? setUpEachTest,
 });
