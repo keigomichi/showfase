@@ -129,6 +129,34 @@ void main() {}
     },
   );
 
+  test(
+    'escapes literal `\$` in function names and preview name/group',
+    () async {
+      final _RunResult r = await _run(<String, Object>{
+        'my_app|lib/foo.dart': r'''
+import 'package:flutter/widgets.dart';
+import 'package:flutter/widget_previews.dart';
+
+@Preview(name: 'Amount: \$100', group: 'Prices')
+Widget $100() => const Widget();
+''',
+        'my_app|lib/showfase.dart': '''
+import 'package:showfase/showfase.dart';
+import 'package:showfase_annotation/showfase_annotation.dart';
+
+@ShowfaseRoot()
+void main() {}
+''',
+      });
+      expect(r.generated, isNotNull);
+      // A valid Dart string literal with the `$` escaped as `\$`, not left
+      // as a bare `$` that the parser would treat as interpolation.
+      expect(r.generated, contains(r'foo.dart#\$100'));
+      expect(r.generated, contains(r"name: 'Amount: \$100'"));
+      expect(r.generated, contains(r'_i2.$100()'));
+    },
+  );
+
   test('errors on multiple @ShowfaseRoot annotations in one library', () async {
     final _RunResult r = await _run(<String, Object>{
       'my_app|lib/showfase.dart': '''

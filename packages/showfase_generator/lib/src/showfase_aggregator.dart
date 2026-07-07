@@ -10,6 +10,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'const_emitter.dart';
+import 'dart_literal.dart';
 import 'preview_metadata.dart';
 import 'type_checkers.dart';
 
@@ -114,8 +115,8 @@ cb.Expression _emitEntry(PreviewMetadata p) {
   ).closure;
 
   final Map<String, cb.Expression> args = <String, cb.Expression>{
-    'id': cb.literalString(id),
-    'scriptUri': cb.literalString(p.libraryUri),
+    'id': literalStringLiteral(id),
+    'scriptUri': literalStringLiteral(p.libraryUri),
     'previewFunction': previewClosure,
   };
   if (p.line != null) args['line'] = cb.literalNum(p.line!);

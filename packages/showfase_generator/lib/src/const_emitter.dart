@@ -1,6 +1,7 @@
 import 'package:code_builder/code_builder.dart' as cb;
 
 import 'const_node.dart';
+import 'dart_literal.dart';
 
 /// Rebuilds a [ConstNode] tree into a `code_builder` const expression.
 ///
@@ -13,7 +14,7 @@ cb.Expression emitConst(ConstNode node) {
     ConstBool(:final value) => cb.literalBool(value),
     ConstInt(:final value) => cb.literalNum(value),
     ConstDouble(:final value) => _emitDouble(value),
-    ConstString(:final value) => cb.literalString(value),
+    ConstString(:final value) => literalStringLiteral(value),
     ConstSymbol(:final value) => _literalSymbol(value),
     ConstType(:final symbol, :final libraryUri) => cb.refer(symbol, libraryUri),
     ConstEnum(:final symbol, :final libraryUri, :final value) => cb.refer(
