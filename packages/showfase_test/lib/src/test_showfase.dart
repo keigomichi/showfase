@@ -131,12 +131,14 @@ Future<void> _takeSnapshot({
   );
 
   try {
-    await tester.runAsync(() async {
-      await SnapshotSupport.startDevice(target, tester, device);
-      await SnapshotSupport.resize(preview, tester, device);
-      await SnapshotSupport.precacheAssetImage(tester);
-      await setUpEachTest?.call(tester);
-    });
+    // Pumping and resizing run under fake async, which is faster; only image
+    // decoding (inside precacheAssetImage) and user setup get real async.
+    await SnapshotSupport.startDevice(target, tester, device, preview);
+    await SnapshotSupport.resize(preview, tester, device);
+    await SnapshotSupport.precacheAssetImage(tester);
+    if (setUpEachTest != null) {
+      await tester.runAsync(() => setUpEachTest(tester));
+    }
     await expectLater(find.byWidget(target), matchesGoldenFile(goldenPath));
   } finally {
     debugDefaultTargetPlatformOverride = null;

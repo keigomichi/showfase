@@ -104,6 +104,7 @@ Future<void> main() async {
       ),
       tester,
       _device,
+      preview,
     );
     await SnapshotSupport.resize(preview, tester, _device);
     // 30 items × 40px: maxScrollExtent (900) + viewport (300).
@@ -127,6 +128,7 @@ Future<void> main() async {
       ),
       tester,
       _device,
+      preview,
     );
     await SnapshotSupport.resize(preview, tester, _device);
     expect(tester.view.physicalSize.width, 120);
@@ -150,6 +152,7 @@ Future<void> main() async {
       ),
       tester,
       _device,
+      preview,
     );
     await expectLater(
       () => SnapshotSupport.resize(preview, tester, _device),
