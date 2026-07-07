@@ -5,4 +5,5 @@
 library;
 
 export 'src/snapshot_device.dart';
+export 'src/snapshot_shard.dart';
 export 'src/test_showfase.dart';

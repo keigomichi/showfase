@@ -17,6 +17,8 @@ const _device = SnapshotDevice(
 
 Widget _redBox() => const ColoredBox(color: Color(0xFFCC3333));
 
+Widget _greenBox() => const ColoredBox(color: Color(0xFF33CC66));
+
 Widget _list() => ListView(
   children: [
     for (var i = 0; i < 30; i++)
@@ -88,6 +90,46 @@ Future<void> main() async {
     subDir: 'filtered',
     previewFilter: (preview) => preview.name == 'Fixed',
   );
+
+  // Sharding: the two shards together must produce exactly the files an
+  // unsharded run would, at the same paths.
+  for (var s = 0; s < 2; s++) {
+    await testShowfase(
+      _previews,
+      devices: const [_device],
+      builder: _shell,
+      snapshotDir: 'goldens',
+      subDir: 'sharded',
+      shard: SnapshotShard(index: s, total: 2),
+    );
+  }
+
+  // Collision suffixes are resolved from the full list before slicing, so
+  // shard 0 owns Dup.png (red) and shard 1 owns Dup_2.png (green) no matter
+  // which shard runs. If suffixes were shard-local, both shards would render
+  // their own Dup.png and the colors would mismatch on compare.
+  const dupPreviews = <ShowfasePreview>[
+    ShowfasePreview(
+      id: 't#dupRed',
+      previewData: Preview(name: 'Dup', group: 'Boxes', size: Size(60, 40)),
+      builder: _redBox,
+    ),
+    ShowfasePreview(
+      id: 't#dupGreen',
+      previewData: Preview(name: 'Dup', group: 'Boxes', size: Size(60, 40)),
+      builder: _greenBox,
+    ),
+  ];
+  for (var s = 0; s < 2; s++) {
+    await testShowfase(
+      dupPreviews,
+      devices: const [_device],
+      builder: _shell,
+      snapshotDir: 'goldens',
+      subDir: 'sharded',
+      shard: SnapshotShard(index: s, total: 2),
+    );
+  }
 
   testWidgets('resize grows the surface to fit scrollable content', (
     tester,
